@@ -33,14 +33,21 @@ function charitable_get_donation( $donation_id, $force = false ) {
 
 	}
 
-	$donation = wp_cache_get( $donation_id, 'charitable_donation', $force );
+	$postType = get_post_type( $donation_id );
 
-	if ( ! $donation ) {
-		$donation = charitable()->donation_factory->get_donation( $donation_id );
-		wp_cache_set( $donation_id, $donation, 'charitable_donation' );
+	// Check to make sure item requested is actually a charitable_donation.
+	if($post_type === 'charitable_donation') {
+		$donation = wp_cache_get( $donation_id, 'charitable_donation', $force );
+
+		if ( ! $donation ) {
+			$donation = charitable()->donation_factory->get_donation( $donation_id );
+			wp_cache_set( $donation_id, $donation, 'charitable_donation' );
+		}
+
+		return $donation;
+	} else {
+		return false;
 	}
-
-	return $donation;
 }
 
 /**
@@ -78,9 +85,9 @@ function charitable_create_donation( array $args ) {
 function charitable_get_donation_by_key( $donation_key ) {
 	global $wpdb;
 
-	$sql = "SELECT post_id 
-			FROM $wpdb->postmeta 
-			WHERE meta_key = 'donation_key' 
+	$sql = "SELECT post_id
+			FROM $wpdb->postmeta
+			WHERE meta_key = 'donation_key'
 			AND meta_value = %s";
 
 	return $wpdb->get_var( $wpdb->prepare( $sql, $donation_key ) );
@@ -238,7 +245,7 @@ function charitable_cancel_donation() {
 
 /**
  * Load the donation form script.
- * 
+ *
  * @return  void
  * @since   1.4.0
  */
