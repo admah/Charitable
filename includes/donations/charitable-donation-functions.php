@@ -33,7 +33,7 @@ function charitable_get_donation( $donation_id, $force = false ) {
 
 	}
 
-	$postType = get_post_type( $donation_id );
+	$post_type = get_post_type( $donation_id );
 
 	// Check to make sure item requested is actually a charitable_donation.
 	if($post_type === 'charitable_donation') {
