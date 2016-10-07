@@ -1,6 +1,6 @@
 <?php
 /**
- * Display the table of products requiring licenses. 
+ * Display the table of products requiring licenses.
  *
  * @author  Studio 164a
  * @package Charitable/Admin View/Settings
@@ -10,13 +10,14 @@
 $helper = charitable_get_helper( 'licenses' );
 $products = $helper->get_products();
 
-if ( empty( $products ) ) : 
-    return;
-endif;
+if ( empty( $products ) ) : ?>
+    </br>
+    <?php _e("We're sorry, but you currently have no active extensions.  Feel free to browse available extensions by clicking <a href='https://www.wpcharitable.com/extensions/'>here</a>.", 'charitable');?>
+<?php endif;
 
 foreach ( $products as $key => $product ) :
 
-    $license = $helper->get_license_details( $key );    
+    $license = $helper->get_license_details( $key );
 
     if ( is_array( $license ) ) {
         $is_active = $license[ 'valid' ];
@@ -26,7 +27,7 @@ foreach ( $products as $key => $product ) :
         $is_active = false;
         $license_key = $license;
     }
-    
+
     ?>
     <div class="charitable-settings-object charitable-licensed-product cf">
         <h4><?php echo $product[ 'name' ] ?></h4>
@@ -42,7 +43,7 @@ foreach ( $products as $key => $product ) :
                     <span class="license-invalid"><?php _e( 'We could not validate this license', 'charitable' ) ?></span>
                 <?php endif ?>
             </div>
-        <?php endif ?>        
+        <?php endif ?>
     </div>
 
     <?php
